@@ -1,0 +1,16 @@
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.env
+*.local.yaml
+face_embedding.txt
+simulated_logs.txt
+*.log
+.idea/workspace.xml
