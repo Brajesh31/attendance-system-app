@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+title: "Face Attendance System"
+message: "If you use this project, please cite this repository."
+type: software
+authors:
+  - family-names: Kumar
+    given-names: Brajesh
+    website: https://github.com/brajesh31
+repository-code: https://github.com/Brajesh31/attendance-system-app
+license: MIT
+version: 0.1.0
+date-released: 2025-01-01
