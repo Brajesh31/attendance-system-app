@@ -1,123 +1,68 @@
-# Face Attendance System App
+# Face Attendance System
 
-Welcome to the **Face Attendance System App**! This Python-based application leverages **InsightFace** for facial recognition and **Streamlit** for its user-friendly interface. Developed by **Harsh Vaidya**, this project provides a seamless way to manage attendance using advanced facial recognition technology.
+Face Attendance System is a Streamlit prototype that registers face embeddings, recognizes faces from a live WebRTC stream, and writes attendance events to Redis. It uses InsightFace with the bundled `buffalo_sc` ONNX model and provides pages for live recognition, registration, and reporting.
 
-We invite open-source contributors to enhance this project further! 🚀
-
-## About the Project
-
-The **Face Attendance System App** is designed to simplify attendance management by leveraging facial recognition. This project is perfect for use in classrooms, offices, or any setting where attendance tracking is required.
+> **Privacy and security warning:** Facial embeddings are biometric data. This repository is an educational prototype and is not ready for production or unsupervised use. Do not upload real biometric data, credentials, or identifiable attendance records without consent, access controls, retention rules, and a legal/privacy review.
 
 ## Features
 
-- **Real-Time Facial Recognition:** Utilizes the powerful InsightFace library for accurate and efficient facial recognition
-- **Streamlit Interface:** A simple, interactive, and user-friendly web-based interface
-- **Redis Integration:** Enables fast data storage and retrieval for real-time performance
-- **Open Source:** Contributions are welcome from developers worldwide!
+- Streamlit authentication using `streamlit-authenticator`.
+- Live camera recognition using `streamlit-webrtc`, OpenCV, and InsightFace.
+- Registration of a person’s averaged face embedding in Redis.
+- Redis-backed attendance logs in `attendance:logs`.
+- Reporting by date, name, role, first/last timestamp, duration, and presence status.
+- Local `buffalo_sc` model assets under `insightface_model/models/`.
 
-## Getting Started
+## Requirements
 
-1. **Clone the Repository**
-   ```sh
-   git clone https://github.com/harsh432004/attendance-system-app
-   ```
+- Python 3.10 or newer.
+- Redis reachable from the application.
+- A camera and browser that support WebRTC for live pages.
+- CPU-compatible ONNX Runtime; GPU execution is not configured by default.
 
-2. **Navigate to Project Directory**
-   ```sh
-   cd attendance-system-app
-   ```
+## Setup
 
-3. **Install Dependencies**
-   ```sh
-   pip install -r requirements.txt
-   ```
+```bash
+git clone https://github.com/Brajesh31/attendance-system-app.git
+cd attendance-system-app
+python -m venv .venv
+```
 
-4. **Run the Application**
-   ```sh
-   streamlit run app.py
-   ```
+Activate the environment (`.venv\Scripts\activate` on Windows or `source .venv/bin/activate` on POSIX), then install:
 
-5. **Access the App**  
-   Open your browser and visit http://localhost:8501
+```bash
+python -m pip install -r requirements.txt
+```
 
-## Project Setup for Contributors
+Configure Redis and authentication through an untracked deployment configuration. The committed `config.yaml` contains sample identity data and a sample cookie key; replace it before any shared run. Redis connection values are currently placeholders in the source and should be externalized.
 
-### Setting Up the Development Environment
+## Run
 
-1. **Set Up Virtual Environment**
-   ```sh
-   python -m venv venv
-   source venv/bin/activate   # On Windows: venv\Scripts\activate
-   ```
+The Streamlit entry point is `Home.py`:
 
-2. **Install Required Libraries**
-   ```sh
-   pip install -r requirements.txt
-   pip install insightface
-   ```
+```bash
+streamlit run Home.py
+```
 
-3. **Download Required Models**
-   - Download the buffalo_l and buffalo_sc models from the official InsightFace repository
-   - Place the downloaded models in the appropriate directory within the project
+Open the displayed local URL, normally `http://localhost:8501`. The pages are:
 
-4. **Set Up Redis**
-   - Install and set up a Redis instance
-   - You can use Redis Cloud or install Redis locally on your machine
+- `1_Real_Time_Prediction.py`: camera recognition and log collection.
+- `2_Registration_form.py`: captures frames and saves averaged embeddings.
+- `3_Report.py`: reads registered data and attendance logs from Redis.
 
-5. **Run for Development**
-   ```sh
-   streamlit run app.py
-   ```
+## Data flow
 
-## Contributing
+1. Registration captures multiple face embeddings and writes their mean to the Redis hash `academy:register` using `Name@Role` as the field.
+2. Recognition compares a live embedding with stored vectors using cosine similarity.
+3. Recognized names are buffered and periodically pushed to the Redis list `attendance:logs` as `Name@Role@Timestamp`.
+4. The report page parses the list and calculates daily in/out times and duration.
 
-1. **Fork the Repository**
-   - Click the "Fork" button at the top-right corner
+## Development
 
-2. **Create a Branch**
-   ```sh
-   git checkout -b feature-name
-   ```
+Keep credentials, Redis endpoints, embeddings, logs, and camera captures outside version control. Validate changes with a disposable Redis database and synthetic identities. There is no automated test suite or lint configuration; at minimum run `python -m compileall` on the Python source and exercise registration, recognition, and reporting manually.
 
-3. **Make Changes**
-   - Add your changes and test thoroughly
+See [docs/architecture.md](docs/architecture.md), [docs/database.md](docs/database.md), and [docs/troubleshooting.md](docs/troubleshooting.md).
 
-4. **Commit Changes**
-   ```sh
-   git commit -m "Description of changes"
-   ```
+## License
 
-5. **Push Changes**
-   ```sh
-   git push origin feature-name
-   ```
-
-6. **Create Pull Request**
-   - Submit a pull request with clear description of changes
-
-### Contribution Guidelines
-- Ensure code adheres to project's coding standards
-- Test changes locally before submitting
-- Include comments and documentation for new features
-
-## Fun-Fact
-
-This project can be used in your college project and also used in hackathons 😀
-
-## Deploymet Guide
-- For more information on how to deploy the Attendance System, check out the documentation at [Attendance System Deployment Docs](https://attendance-system-app-deploymentdocs.vercel.app/).
-
-
-## Contributors
-
-- Harsh Vaidya - Lead Developer
-- Want to see your name here? Contribute to the project!
-
-## Support
-
-For inquiries, issues, or support:
-
-**Harsh Vaidya**  
-📧 Email: harshvaidya432004@gmail.com
-
-You can also create an issue in the repository for bugs, feature requests, or questions.
+This project is available under the MIT License. See [LICENSE](LICENSE).
