@@ -13,8 +13,8 @@ if st.session_state['authentication_status']:
 
     st.header('Attendance System using Face Recognition')
 
-    st.success('Model loaded sucesfully')
-    st.success('Redis db sucessfully connected')
+    st.success('Model loaded successfully')
+    st.success('Redis db successfully connected')
 
 else:
     authenticator.login('Login', 'main')
