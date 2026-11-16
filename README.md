@@ -375,4 +375,4 @@ The project includes an MIT license. See [LICENSE](LICENSE). Model weights, pret
 
 <p align="center"><sub>Documentation reflects the inspected repository, not an assertion of production readiness.</sub></p>
 
-Last updated: 2026-11-16 18:23 UTC
+Last updated: 2026-11-16 20:04 UTC
