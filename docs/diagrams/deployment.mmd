@@ -1,0 +1,8 @@
+flowchart LR
+  Browser["Browser"] -->|HTTPS + WebSocket| Proxy["Apache TLS reverse proxy"]
+  Proxy -->|Private HTTP| Streamlit["Streamlit on loopback"]
+  Streamlit --> Redis[("Private Redis")]
+  Streamlit --> Model["Local ONNX model assets"]
+  Admin["Operator"] -->|SSH / controlled access| Host["Hardened host"]
+  Host --> Proxy
+  Host --> Streamlit
