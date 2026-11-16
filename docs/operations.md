@@ -1,41 +1,44 @@
-# 🧰 Operations runbook
+# 🛠️ Operations and maintenance
 
-## Service dependencies
+## Runtime components
 
-| Dependency | Used by | Failure symptom |
-|---|---|---|
-| Streamlit process | All pages | App unavailable |
-| Redis | Registration, recognition, reporting | Data read/write errors |
-| InsightFace model assets | Registration and recognition | Model load or inference failure |
-| Browser camera/WebRTC | Live and registration pages | No frames or connection state |
-| Apache reverse proxy (optional) | Remote deployment | UI/WebSocket proxy failure |
+The operational dependency chain includes Streamlit, Redis, local InsightFace ONNX model files, camera/WebRTC transport, and the host's native Python/OS libraries.
 
 ## Startup checks
 
-1. Confirm the intended Python environment is active.
-2. Confirm private authentication configuration exists and is not a sample.
-3. Confirm Redis endpoint, TLS, credentials, and ACL.
-4. Confirm model asset files and runtime provider.
-5. Start Streamlit under an unprivileged account.
-6. Verify health manually through the browser and a synthetic test workflow.
+- Python runtime and dependencies match the tested constraints.
+- Authentication config exists, is private, and contains non-default secrets.
+- Redis is reachable on a private interface.
+- Required Redis keys are in the expected data format.
+- Model directory and ONNX files exist.
+- Camera/WebRTC transport works through the deployment route.
+- Host clock and reporting timezone are configured consistently.
 
-## Monitoring signals
+## Monitoring
 
-- Streamlit process liveness and restart count.
-- Redis availability, latency, memory, key counts, and rejected connections.
-- Model load time, inference latency, CPU and memory.
-- WebRTC connection and frame processing failure rate.
-- Registration success/failure counts without identity or vector contents.
-- Invalid event parse count.
-- Report generation latency and row counts.
-- Authentication failure and administrative access events.
+Monitor process availability, restart count, memory, CPU, Redis connectivity/latency, WebRTC processing errors, model load failures, malformed events, and report-generation errors. Metrics should avoid names, raw embeddings, camera frames, cookie values, and other personal information.
 
-Do not log raw camera frames, face embeddings, passwords, cookie values, or complete personal attendance rows.
+## Redis care
 
-## Backup and restore
-
-Backups can contain biometric templates and attendance history. Encrypt backups, restrict access, set retention, test restore, and ensure deletion requests are propagated to backup expiry or verified purge. Do not copy production data to local development machines.
+- Use ACLs and least privilege.
+- Restrict network access and enable TLS.
+- Separate environments and prevent test/production cross-use.
+- Define retention, backup encryption, restore tests, and deletion propagation.
+- Monitor memory growth of attendance:logs.
 
 ## Incident response
 
-For suspected biometric exposure: restrict access, preserve sanitized system evidence, involve security/privacy owners, rotate secrets, assess affected data and backups, follow notification duties, and document remediation. Never attach affected biometric samples to public tickets.
+1. Restrict access and preserve security evidence.
+2. Rotate affected credentials and signing keys.
+3. Restrict Redis network access.
+4. Identify affected records and access scope without unnecessary copying.
+5. Notify responsible privacy/security owners.
+6. Follow applicable notification requirements.
+7. Remediate and add regression tests.
+8. Verify deletion/retention tasks, including replicas and backups.
+
+## Recovery
+
+Restore Redis only into a restricted environment. Validate key type, embedding length, event schema, timestamp parsing, and retention policy before reopening service. Current event/vector formats are not versioned, so cross-version recovery is fragile.
+
+No production monitoring, alerting, backup schedule, SLO, on-call rota, or disaster-recovery procedure is configured in the source. This document defines requirements, not existing automation.
