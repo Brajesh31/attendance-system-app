@@ -2,43 +2,58 @@
 
 ## Scope
 
-This review is based on the checked-in application files and configuration. It is a source-level risk assessment, not a penetration test or legal compliance certification.
+This is a source-level review of the tracked application structure and key Python/configuration files. It is not a penetration test, model validation, legal opinion, or security certification.
 
-## High-priority findings
+## Findings
 
-| ID | Finding | Evidence | Risk | Recommended action |
-|---|---|---|---|---|
-| SEC-01 | Sample authentication identity and cookie signing key committed | `config.yaml` | Account exposure/session forgery if reused | Remove sample values from deployment path, rotate key, invalidate cookies |
-| SEC-02 | Redis credentials are placeholders hard-coded in modules | `face_rec.py`, `upload_logs.py` | Secret/config hygiene failure and weak deployment safety | Centralize environment/secret manager config |
-| SEC-03 | Sensitive biometric vectors stored as raw bytes | `face_rec.py` | Unauthorized access may expose biometric identifiers | Restrict Redis access, encryption, retention and deletion |
-| SEC-04 | Fixed temporary embedding filename | `face_rec.py`, registration page | Cross-session collisions and local data exposure | Session-scoped memory or isolated secure temp file |
-| SEC-05 | No liveness/anti-spoofing implementation shown | Recognition flow | Photo/video spoofing risk | Do not claim identity assurance; evaluate controls |
-| SEC-06 | No demonstrated role-based authorization for reports/admin actions | Page structure | Excessive access to biometric and attendance data | Enforce roles server-side at every data operation |
-| SEC-07 | Attendance events contain personal labels and timestamps | Redis list | Behavior tracking and excessive retention | Pseudonymize, minimize and expire records |
-| SEC-08 | Import-time side effects in authentication and model modules | `auth.py`, `face_rec.py` | Fragile app initialization and test isolation | Use explicit factories and dependency injection |
+### Critical: sample credentials and cookie signing material
 
-## Threat actors
+config.yaml contains a sample account identity, a hash for a trivial example password, and a cookie signing key. If reused, these values permit credential abuse or cookie-related compromise.
 
-- Unauthorized internet user probing exposed Streamlit or Redis services.
-- Malicious or compromised authenticated operator.
-- Person attempting to spoof recognition with an image/video.
-- Insider accessing attendance history without legitimate purpose.
-- Accidental operator misconfiguration or data export.
-- Compromised dependency/model artifact.
+**Action:** replace sample configuration for every environment, rotate any reused signing key, and keep secrets outside version control.
 
-## Required baseline controls
+### High: Redis configuration is hard-coded
 
-1. Keep Redis private and protected with ACL/TLS.
-2. Remove committed sample identities and rotate cookie signing keys.
-3. Use secret storage for auth and datastore credentials.
-4. Restrict access to enrollment, live recognition, reports, and deletion.
-5. Define consent, retention, deletion, and alternative procedures.
-6. Validate event and vector dimensions before processing.
-7. Audit administrative access without recording raw biometric values.
-8. Keep dependencies patched and model assets verified.
-9. Test authentication and authorization separately from UI visibility.
-10. Prepare an incident response plan for biometric-data exposure.
+face_rec.py and upload_logs.py declare Redis connection details separately. .env.example is not loaded by the current source.
 
-## Security acceptance criteria
+**Action:** centralize configuration, load secrets at startup, fail closed on missing production config, and use Redis ACL/TLS/private networking.
 
-Do not consider the application production-ready until the high-risk findings have owners, fixes, independent verification, and documented residual risk. See [Threat model](threat-model.md) and [Risk register](risk-register.md).
+### High: biometric data lifecycle is incomplete
+
+Embeddings and attendance logs are written to Redis. No implemented consent, retention, subject deletion, export/correction, or complete audit workflow is shown.
+
+**Action:** define lawful purpose, consent/alternative process, retention, correction/deletion, access control, and audit.
+
+### High: shared temporary embedding file
+
+Registration samples use face_embedding.txt in the process working directory. Multiple users/sessions can collide or read each other's temporary samples.
+
+**Action:** remove shared mutable disk state; use per-session isolated temporary storage and cleanup on cancellation/completion.
+
+### High: global recognition state
+
+Model/Redis objects and live prediction buffer/timer are module/page-level globals. Multi-session concurrency and thread safety are not established.
+
+**Action:** explicitly scope buffers and timers per stream/session; protect shared model state where required.
+
+### Medium: weak event schema
+
+Records use delimiter-separated strings such as Name@Role@Timestamp. Names/roles containing the delimiter can break parsing. Event format has no version or validation.
+
+**Action:** use structured versioned records with stable subject IDs, UTC timestamps, event type, source, and audit metadata.
+
+### Medium: report semantics overstate observations
+
+Periodic sightings are used to infer first/last attendance times, and a minimum span rule determines present status. This does not prove exact arrival or departure.
+
+**Action:** label values as first/last observed, add human correction and a documented policy, or use explicit verified check-in/out events.
+
+### Medium: runtime defects
+
+Known spelling mismatch in report retrieval function and adjacent role string literals in registration page are recorded in known-issues.md.
+
+**Action:** fix with focused tests and regression coverage.
+
+## Secure deployment minimum
+
+Do not use real people until secrets, Redis access, biometric access, consent, alternative attendance, retention, deletion, model accuracy, spoof resistance, and incident response have been reviewed and approved. See threat-model.md and data-privacy.md.
