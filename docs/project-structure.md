@@ -1,56 +1,53 @@
-# 🗂️ Project structure
+# 🗂️ Project structure and file responsibilities
 
-```text
+This map describes the tracked application structure. Model binaries are summarized rather than expanded into the tree.
+
+~~~text
 attendance-system-app/
-├── .github/
-│   ├── ISSUE_TEMPLATE/             # Structured bug, feature and privacy forms
-│   ├── workflows/                  # GitHub Actions automation
-│   └── PULL_REQUEST_TEMPLATE.md
-├── docs/
-│   ├── adr/                        # Architecture decisions
-│   ├── assets/                     # Technical SVG artwork
-│   ├── demo/                       # Real screenshot guidance
-│   ├── diagrams/                   # Mermaid diagrams
-│   └── *.md                        # Engineering and governance docs
-├── insightface_model/
-│   └── models/buffalo_sc/          # ONNX face analysis assets
+├── Home.py                         # Streamlit app entrypoint
+├── auth.py                         # Streamlit authenticator setup/UI
+├── face_rec.py                     # InsightFace, Redis, registration and matching
+├── config.yaml                     # Authenticator sample configuration (replace secrets)
+├── .env.example                    # Illustrative environment variable names
+├── requirements.txt                # Python dependency list
+├── configure.sh                    # Apache reverse-proxy example generator
+├── upload_logs.py                  # Simulated attendance-log importer
 ├── pages/
-│   ├── 1_Real_Time_Prediction.py   # WebRTC frame recognition
-│   ├── 2_Registration_form.py      # Person/embedding registration
-│   └── 3_Report.py                 # Logs and inferred report
-├── Home.py                         # Streamlit entry page
-├── auth.py                         # Authenticator construction
-├── face_rec.py                     # Recognition and Redis logic
-├── upload_logs.py                  # Simulated event importer
-├── config.yaml                     # Current sample auth configuration
-├── configure.sh                    # Apache reverse-proxy config generator
-├── requirements.txt                # Python dependencies (un-pinned)
-├── .env.example                    # Illustrative values, not currently loaded
-└── LICENSE
-```
+│   ├── 1_Real_Time_Prediction.py   # WebRTC recognition and event callback
+│   ├── 2_Registration_form.py      # Capture and register embeddings
+│   └── 3_Report.py                # Redis event parsing and daily report
+├── insightface_model/
+│   └── models/buffalo_sc/          # Local ONNX model assets
+├── docs/
+│   ├── assets/                     # Original SVG illustrations
+│   ├── diagrams/                   # Workflow/architecture diagrams
+│   ├── demo/                       # Screenshot and demo guidance
+│   └── adr/                        # Architecture decisions
+├── scripts/
+│   ├── check_docs.py               # Documentation link/content checks
+│   └── check_svg.py                # SVG validation
+├── .github/
+│   ├── ISSUE_TEMPLATE/             # Bug, feature, docs, privacy templates
+│   └── workflows/                  # Documentation quality and README automation
+└── README.md
+~~~
 
-## Source roles
+## Root components
 
-### `Home.py`
+| Path | Responsibility | Main concern |
+|---|---|---|
+| Home.py | Streamlit page shell | Authentication/UI lifecycle |
+| auth.py | streamlit-authenticator integration | Import-time UI side effects |
+| face_rec.py | Model setup, vectors, matching, logs | Module globals, Redis config, biometric data |
+| config.yaml | Auth users and cookie settings | Sample identity and signing key are committed |
+| requirements.txt | Runtime libraries | Dependencies are not pinned |
+| upload_logs.py | Import local log data to Redis | Hard-coded Redis placeholder and local input file |
+| configure.sh | Apache reverse-proxy example | Placeholder host and TLS paths |
 
-Sets page title/layout and displays authenticated welcome content. It imports `auth.py`, which itself performs a login operation at import time. This creates a fragile coupling between app bootstrap and authentication.
+## Generated artifacts
 
-### `auth.py`
+`__pycache__/` contains tracked Python bytecode files in the current repository. They are generated artifacts, not source. This documentation pass preserves them. A separate cleanup should remove tracked caches and maintain `.gitignore` rules.
 
-Loads `config.yaml`, builds a Streamlit authenticator, and immediately invokes login. It also contains UI rendering. A future refactor should expose a factory or service and keep page rendering in the app layer.
+## Model assets
 
-### `face_rec.py`
-
-Owns the Redis client, FaceAnalysis model, embedding retrieval, cosine matching, event buffering, and registration aggregation. It has module-level initialization side effects.
-
-### `pages/`
-
-Streamlit multipage scripts. Pages import `face_rec` through `Home`, coupling feature code to the application entry script. A neutral service module would be easier to test and avoid page import side effects.
-
-### `insightface_model/`
-
-Contains model files required by the configured InsightFace model root. Review upstream and model-specific terms before redistributing or using commercially.
-
-## Generated and local files
-
-`face_embedding.txt`, `simulated_logs.txt`, local auth configuration, Redis dumps, camera images, and runtime caches are data artifacts, not source code. Keep them out of commits and backups unless an approved retention policy explicitly includes them.
+`insightface_model/models/buffalo_sc/` contains model binaries. Treat model assets as dependent artifacts: document provenance, licensing, version, checksums, and compatibility before changing or redistributing them.
