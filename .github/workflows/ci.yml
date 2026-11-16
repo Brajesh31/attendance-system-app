@@ -1,0 +1,29 @@
+name: Python quality checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Compile Python sources
+        run: python -m compileall -q Home.py auth.py face_rec.py upload_logs.py pages scripts
+      - name: Validate tracked Python source list
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f requirements.txt
+          test -f Home.py
+          test -f face_rec.py
+          test -d pages
