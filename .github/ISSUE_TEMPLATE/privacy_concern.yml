@@ -1,0 +1,33 @@
+name: 🛡️ Privacy or biometric-data concern
+description: Privately report a privacy issue. Do not include affected data.
+title: "[Privacy]: "
+labels: ["privacy", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not submit face images, embeddings, real attendance data, or personal identifiers here. For active exposures, use the private reporting route in SECURITY.md instead.
+  - type: textarea
+    id: concern
+    attributes:
+      label: Concern summary
+      description: Describe the process or control at issue without naming affected people.
+    validations:
+      required: true
+  - type: textarea
+    id: impact
+    attributes:
+      label: Potential impact
+    validations:
+      required: true
+  - type: textarea
+    id: mitigation
+    attributes:
+      label: Suggested mitigation
+  - type: checkboxes
+    id: no_data
+    attributes:
+      label: Data safety
+      options:
+        - label: I have not included biometric or personally identifiable data.
+          required: true

@@ -1,0 +1,36 @@
+name: Documentation quality
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "**.md"
+      - "docs/**"
+      - "scripts/**"
+      - ".github/workflows/docs-quality.yml"
+  pull_request:
+    paths:
+      - "**.md"
+      - "docs/**"
+      - "scripts/**"
+      - ".github/workflows/docs-quality.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  docs:
+    name: Check documentation and diagrams
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Validate Markdown local links and Mermaid blocks
+        run: python scripts/check_docs.py
+      - name: Validate SVG illustrations
+        run: python scripts/check_svg.py

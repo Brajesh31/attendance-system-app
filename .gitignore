@@ -1,16 +1,39 @@
-.venv/
-venv/
-env/
+# Python bytecode and caches
 __pycache__/
 *.py[cod]
+*$py.class
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
-.coverage
-htmlcov/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Local secrets/configuration
 .env
-*.local.yaml
+.env.*
+!.env.example
+config.local.yaml
+.streamlit/secrets.toml
+
+# Biometric and attendance data
 face_embedding.txt
 simulated_logs.txt
-*.log
+*.face
+*.embedding
+*.onnx.data
+redis-dump.rdb
+dump.rdb
+*.aof
+attendance-export*.csv
+camera-capture*.jpg
+camera-capture*.png
+
+# Runtime and editor artifacts
+.streamlit/
 .idea/workspace.xml
+.DS_Store
+Thumbs.db
+*.log

@@ -1,0 +1,44 @@
+name: 🐛 Bug report
+description: Report a reproducible application defect without disclosing personal or biometric data.
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not include face images, embeddings, real names, attendance logs, credentials, Redis URLs, or cookie values.
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What failed, and what did you expect?
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, Python version, CPU architecture, browser.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction steps
+      description: Use synthetic identities and a disposable Redis instance.
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Sanitized error output
+      description: Remove all secrets and personal data.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Safety checks
+      options:
+        - label: I removed credentials and personal/biometric data.
+          required: true
+        - label: I reproduced this with synthetic or approved test data.
+          required: true

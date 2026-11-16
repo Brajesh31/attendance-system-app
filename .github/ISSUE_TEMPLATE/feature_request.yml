@@ -1,0 +1,33 @@
+name: 💡 Feature request
+description: Propose a scoped feature and its user impact.
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What specific user problem exists?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior
+      description: Describe expected inputs, outputs, and failure states.
+    validations:
+      required: true
+  - type: textarea
+    id: privacy
+    attributes:
+      label: Privacy, security and accessibility impact
+      description: Explain biometric data, retention, consent, access and alternative workflow impacts.
+    validations:
+      required: true
+  - type: textarea
+    id: validation
+    attributes:
+      label: Acceptance criteria
+      description: Include testable outcomes and evidence.
+    validations:
+      required: true

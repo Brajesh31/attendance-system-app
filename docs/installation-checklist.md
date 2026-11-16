@@ -1,0 +1,21 @@
+# ☑️ Installation verification checklist
+
+- [ ] Python version recorded.
+- [ ] Virtual environment created and activated.
+- [ ] Dependencies installed from reviewed requirements.
+- [ ] Redis running on a private interface.
+- [ ] Redis authentication/TLS settings verified.
+- [ ] Sample `config.yaml` not used for shared deployment.
+- [ ] Private authentication config is permission-restricted.
+- [ ] Cookie signing key generated uniquely.
+- [ ] Redis configuration externalized or source adjusted to intended endpoint.
+- [ ] Model assets exist and provenance/license reviewed.
+- [ ] Streamlit starts without import errors.
+- [ ] Browser camera permission works.
+- [ ] Registration tested with synthetic/approved data.
+- [ ] Redis registration key verified in disposable environment.
+- [ ] Recognition tested with a synthetic/approved sample.
+- [ ] Attendance event writes validated.
+- [ ] Report logic tested after resolving known function mismatch.
+- [ ] Data retention and deletion process documented.
+- [ ] Non-biometric alternative available.
