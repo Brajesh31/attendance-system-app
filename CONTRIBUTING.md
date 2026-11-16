@@ -1,44 +1,54 @@
-# 🤝 Contributing
+# 🤝 Contributing to Face Attendance System
 
-Thank you for considering a contribution. This repository is an educational face-recognition attendance prototype. Contributions must preserve privacy and describe limitations honestly.
+Thank you for considering a contribution. This repository is a Streamlit/InsightFace/Redis prototype that processes biometric data. Correctness, privacy, security and honest reporting are more important than feature count.
 
-## Before you begin
+## Before opening an issue
 
-- Read [README](README.md), [security policy](SECURITY.md), [privacy guide](docs/data-privacy.md), and [known issues](docs/known-issues.md).
-- Use a focused branch and a focused pull request.
-- Never use real attendance or biometric data in test fixtures.
-- Check model and package licensing before adding assets.
+- Read README.md and the documentation hub.
+- Check known issues and current roadmap.
+- Use synthetic identities and disposable Redis data.
+- Never attach real face images, embeddings, attendance histories, credentials or private configuration.
+- For security/privacy concerns, use the private reporting process in SECURITY.md.
 
-## Development setup
+## Local development
 
-```bash
+~~~bash
 python -m venv .venv
-# Activate the virtual environment
 python -m pip install -r requirements.txt
-python -m compileall -q Home.py auth.py face_rec.py upload_logs.py pages
-```
+streamlit run Home.py
+~~~
 
-## Contribution requirements
+Start an isolated local Redis instance first. See docs/installation.md. Replace all sample authentication/configuration secrets.
 
-- Add tests for changed behavior wherever possible.
-- Document changes to Redis keys, embedding dimension, dtype, threshold, and timestamp semantics.
-- Include privacy impact for any collection, matching, export, or retention change.
-- Keep credentials and private config out of commits.
-- Do not commit camera captures, face embeddings, Redis dumps, `face_embedding.txt`, or real logs.
-- Avoid unrelated formatting churn.
-- Update docs and diagrams where architecture changes.
+## Coding expectations
 
-## Pull request checklist
+- Use typed, validated data at module boundaries where practical.
+- Do not share temporary registration files between users/sessions.
+- Avoid process-global mutable attendance buffers/timers.
+- Use stable subject IDs rather than delimiter-concatenated names.
+- Validate Redis value types, embedding dimensions, dtype, and timestamps.
+- Keep face images and embeddings out of logs.
+- Fail clearly when Redis or model assets are unavailable.
+- Treat threshold changes as model/system changes that require evaluation.
+- Maintain a non-biometric attendance path in any real deployment design.
 
-- [ ] Change is scoped and explained.
-- [ ] Syntax checks run.
-- [ ] Tests added or missing coverage explained.
-- [ ] No secrets, biometric data, caches, or generated files added.
-- [ ] Redis data contracts are documented.
-- [ ] Privacy/security implications reviewed.
-- [ ] Screenshots use synthetic/non-identifiable data only.
-- [ ] Documentation marks proposed features as proposed.
+## Tests
 
-## Review standard
+Include unit tests, Redis integration tests using disposable data, malformed-input cases, concurrent-session cases, and report edge cases. Changes to matching behavior require evaluation of false acceptance and false rejection, threshold rationale, and uncertainty. Do not claim accuracy without measured evidence.
 
-A face-recognition change must include evaluation evidence and discuss false acceptance/rejection, liveness limitations, accessibility, and a non-biometric alternative. Do not claim production readiness from a successful demo.
+## Privacy and security review
+
+Any change that collects, stores, matches, exports, or deletes biometric data must include:
+- purpose and data-minimization impact;
+- consent/notice and alternative workflow;
+- access-control implications;
+- retention and verified deletion behavior;
+- logging and incident-response implications.
+
+## Documentation
+
+Update API/data contracts, architecture and flow diagrams, threat model, privacy documentation, known-issues register, and changelog where affected.
+
+## Pull requests
+
+Use the PR template. State exact commands and results. Mark untested behavior clearly. Never add real personal/biometric data to a diff.
