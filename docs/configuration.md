@@ -1,58 +1,47 @@
 # ⚙️ Configuration and secrets
 
-## Current configuration sources
+## Configuration sources currently used
 
-| Setting | File | Current behavior |
+| Setting | Location | Current behavior |
 |---|---|---|
-| Streamlit authenticator users | `config.yaml` | YAML loaded by `auth.py` |
-| Cookie name/key/expiry | `config.yaml` | Passed to authenticator |
-| Redis hostname/port/password | `face_rec.py` | Hard-coded placeholders |
-| Redis hostname/port/password | `upload_logs.py` | Separate hard-coded placeholders |
-| Model root/name/provider | `face_rec.py` | Hard-coded model settings |
-| Similarity threshold | Live page call | Hard-coded 0.5 |
-| Attendance flush interval | Live page | Hard-coded 30 seconds |
+| Authenticator usernames/password hashes | config.yaml | Loaded by authentication integration |
+| Cookie name/key/expiry | config.yaml | Used by authenticator |
+| Redis host/port/password | face_rec.py | Hard-coded placeholder values |
+| Redis host/port/password | upload_logs.py | Separate hard-coded placeholder values |
+| Model root/name | face_rec.py | Relative local path and buffalo_sc |
+| ONNX provider | face_rec.py | CPUExecutionProvider configured |
+| Detection size | face_rec.py | 640 × 640 |
+| Matching threshold | Page call | 0.5 passed to search |
+| Event flush interval | Live page | 30 seconds |
+| Status duration rule | Report page | 60-second span heuristic |
 
-## Critical committed sample values
+## .env.example limitation
 
-The committed `config.yaml` contains a human name/email, a password hash derived from a trivial sample password, a preauthorized email, and a sample cookie signing key. This must not be used in any shared environment. Remove the sample identity and replace the signing key with a random secret. If the account/key has ever been used outside a local demo, rotate it and invalidate existing cookies.
+The repository contains .env.example, but the current source does not load it through python-dotenv or a similar mechanism. Its values are documentation placeholders only. A configuration refactor is required before environment variables affect Redis connections.
 
-## Environment example caveat
+## Secret handling
 
-`.env.example` documents `REDIS_HOST`, `REDIS_PORT`, and `REDIS_PASSWORD`, but the source does not load these values. There is no dotenv integration. Merely creating a local `.env` file will not configure the existing Redis clients.
+- Never commit real passwords, hashes, cookie keys, Redis passwords, tokens, or private endpoints.
+- config.yaml includes sample identity and cookie signing material. Replace these before shared use.
+- Generate a new cryptographically random cookie signing key for each environment.
+- Rotate any secret that may have been reused outside a disposable local environment.
+- Keep configuration readable only by the service account.
+- Do not print credentials into Streamlit output or logs.
 
-## Recommended configuration refactor
+## Proposed environment contract
 
-1. Introduce a single settings module.
-2. Read required values from process environment or an approved secret manager.
-3. Validate missing values and types at startup.
-4. Use TLS and certificate verification for remote Redis.
-5. Inject a configured Redis client into application services.
-6. Keep a sanitized template such as `config.example.yaml`, with no real identity or secrets.
-7. Make startup fail closed if production credentials or encryption settings are missing.
+| Variable | Purpose |
+|---|---|
+| APP_ENV | Development/staging/production mode |
+| REDIS_HOST | Redis host |
+| REDIS_PORT | Redis port |
+| REDIS_USERNAME | Redis ACL username |
+| REDIS_PASSWORD | Redis credential |
+| REDIS_TLS | Enable TLS |
+| AUTH_CONFIG_PATH | Private authenticator YAML path |
+| MODEL_ROOT | Trusted model asset root |
+| FACE_MATCH_THRESHOLD | Reviewed matching threshold |
+| ATTENDANCE_EVENT_INTERVAL_SECONDS | Event buffer interval |
+| APP_TIMEZONE | Explicit reporting timezone |
 
-Example environment variable names for a future implementation:
-
-```dotenv
-APP_ENV=development
-REDIS_HOST=127.0.0.1
-REDIS_PORT=6379
-REDIS_USERNAME=
-REDIS_PASSWORD=
-REDIS_TLS=false
-STREAMLIT_AUTH_CONFIG=/run/secrets/attendance-auth.yaml
-FACE_MODEL_ROOT=insightface_model
-FACE_MODEL_NAME=buffalo_sc
-FACE_MATCH_THRESHOLD=0.5
-ATTENDANCE_FLUSH_SECONDS=30
-```
-
-These names are a proposed contract; the current code does not consume them.
-
-## Secret handling checklist
-
-- Never commit a Redis URL/password, cookie signing key, auth password, or cloud token.
-- Never log secrets or full connection URLs.
-- Scope Redis credentials to the minimum required keyspace and commands.
-- Rotate secrets after exposure and invalidate old sessions.
-- Restrict filesystem permissions on private configuration.
-- Scan repository history and CI logs when responding to an exposure.
+These names are proposed; current source does not load them.
