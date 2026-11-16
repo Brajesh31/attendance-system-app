@@ -1,22 +1,31 @@
-# Code of Conduct
+# 🤝 Code of Conduct
 
-## Our commitment
+## Commitment
 
-We aim to make participation in this project respectful, constructive, and safe. The project handles sensitive biometric and attendance concepts, so respectful discussion also means taking privacy, consent, accessibility, and bias concerns seriously.
+We want a respectful and technically constructive project community. Contributors should be able to participate without harassment or discrimination.
 
 ## Expected behavior
 
 - Be respectful and assume good faith.
-- Critique technical ideas without personal attacks.
-- Use inclusive language.
-- Do not share personal data, face images, embeddings, credentials, or private attendance records.
-- Raise safety and privacy concerns without harassment.
-- Credit work accurately.
+- Critique ideas and code, not people.
+- Explain technical disagreements with evidence.
+- Welcome questions and beginner participation.
+- Respect privacy and intellectual property.
+- Never share personal/biometric data, credentials or private configuration.
+- Give actionable and inclusive feedback.
 
 ## Unacceptable behavior
 
-Harassment, threats, discrimination, doxxing, privacy violations, deliberate disclosure of secrets, or misuse of biometric/attendance data are not acceptable.
+Harassment, discrimination, threats, personal attacks, unwanted contact, publishing private information, credential or biometric disclosure, deliberate disruption, and retaliation against good-faith reports are not acceptable.
+
+## Reporting
+
+Contact the maintainer privately through GitHub for conduct concerns. Use private Security Advisories for security or privacy vulnerabilities.
 
 ## Enforcement
 
-Report concerns privately through the repository maintainer's GitHub profile. Maintainers may edit, reject, or remove contributions that violate this policy or expose sensitive information.
+Maintainers may remove content, close discussions, restrict participation or take proportionate action. Repeated or serious violations may lead to removal from project spaces.
+
+## Scope
+
+This policy applies to repository issues, pull requests, reviews, discussions and project-related communication.
