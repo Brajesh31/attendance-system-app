@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate local Markdown links and Mermaid fenced blocks without dependencies."""
+"""Validate local Markdown links and balanced fenced code blocks."""
 
 from pathlib import Path
 import re
@@ -10,23 +10,30 @@ MARKDOWN = sorted(
     {ROOT / "README.md", *ROOT.glob("*.md"), *ROOT.glob("docs/**/*.md"), *ROOT.glob(".github/**/*.md")}
 )
 LINK_RE = re.compile(r'(?<!!)\[[^\]]*\]\(([^)]+)\)')
-MERMAID_START = re.compile(r'^\s*```mermaid\s*$')
-FENCE = re.compile(r'^\s*```\s*$')
+FENCE_OPEN = re.compile(r'^\s{0,3}(`{3,}|~{3,})(.*)$')
 
 
 def validate_file(path: Path) -> list[str]:
     errors = []
-    text = path.read_text(encoding="utf-8")
-    in_fence = False
-    for line_number, line in enumerate(text.splitlines(), start=1):
-        if MERMAID_START.match(line):
-            if in_fence:
-                errors.append(f"{path.relative_to(ROOT)}:{line_number}: nested Mermaid fence")
-            in_fence = True
+    lines = path.read_text(encoding="utf-8").splitlines()
+    fence_char = None
+    fence_len = 0
+
+    for line_number, line in enumerate(lines, start=1):
+        if fence_char is not None:
+            closing = re.match(r'^\s{0,3}(' + re.escape(fence_char) + r'{' + str(fence_len) + r',})\s*$', line)
+            if closing:
+                fence_char = None
+                fence_len = 0
             continue
-        if FENCE.match(line):
-            in_fence = not in_fence
+
+        opening = FENCE_OPEN.match(line)
+        if opening:
+            marker = opening.group(1)
+            fence_char = marker[0]
+            fence_len = len(marker)
             continue
+
         for raw in LINK_RE.findall(line):
             target = raw.strip().split("#", 1)[0].split("?", 1)[0]
             if not target or target.startswith(("http://", "https://", "mailto:", "tel:")):
@@ -34,7 +41,8 @@ def validate_file(path: Path) -> list[str]:
             candidate = (path.parent / target).resolve()
             if not candidate.exists():
                 errors.append(f"{path.relative_to(ROOT)}:{line_number}: missing local target {target}")
-    if in_fence:
+
+    if fence_char is not None:
         errors.append(f"{path.relative_to(ROOT)}: unclosed fenced code block")
     return errors
 
