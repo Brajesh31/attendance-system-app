@@ -1,0 +1,17 @@
+flowchart TD
+  A["Open registration"] --> B["Enter name and role"]
+  B --> C["Start WebRTC camera"]
+  C --> D["Capture video frame"]
+  D --> E["InsightFace detects face"]
+  E --> F{"Embedding available?"}
+  F -->|No| D
+  F -->|Yes| G["Append sample to face_embedding.txt"]
+  G --> H{"Enough samples?"}
+  H -->|No| D
+  H -->|Yes| I["Load float32 samples"]
+  I --> J["Reshape to 512 coordinates"]
+  J --> K["Calculate mean embedding"]
+  K --> L["Serialize float32 bytes"]
+  L --> M["HSET academy:register"]
+  N["Note: shared filename is unsafe across sessions"]
+  G -.-> N
