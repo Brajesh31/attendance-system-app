@@ -1,45 +1,62 @@
-## 📝 Summary
+## 🎯 Summary
 
-Describe the change and the user problem it addresses.
+Describe the change, user need, and expected outcome.
 
-## 🔗 Related issue
+## 🧩 Areas affected
 
-Closes #
+- [ ] Streamlit UI / navigation
+- [ ] Authentication / session
+- [ ] Face registration / embeddings
+- [ ] Live recognition / WebRTC
+- [ ] Redis data contracts
+- [ ] Attendance reporting
+- [ ] Configuration / deployment
+- [ ] Documentation / CI
 
-## 🧩 Change category
+List exact modules and Redis keys affected.
 
-- [ ] Bug fix
-- [ ] Feature
-- [ ] Documentation
-- [ ] Refactor
-- [ ] Security/privacy
-- [ ] Dependency/operations
+## 🔐 Security and privacy impact
+
+- [ ] No biometric data, face images, personal attendance data, or credentials included in the diff.
+- [ ] Purpose and data minimization reviewed.
+- [ ] Consent/notice and non-biometric alternative considered.
+- [ ] Access control and Redis permissions reviewed.
+- [ ] Retention and deletion behavior reviewed.
+- [ ] Logs do not include embeddings or personal data.
+- [ ] Model threshold/accuracy/spoofing impact evaluated if relevant.
+
+Explain remaining risk and approvals required.
+
+## 🗄️ Data contract / migration
+
+Redis keys or schema changes:
+Compatibility and migration plan:
+Rollback plan:
+Retention/deletion impact:
 
 ## 🧪 Validation
 
-- [ ] Python compilation completed.
-- [ ] Relevant unit/integration tests run, or missing coverage explained.
-- [ ] Streamlit page manually verified where applicable.
-- [ ] Redis behavior validated with disposable data.
-- [ ] Model loading/camera behavior tested where applicable.
+- [ ] Python syntax compilation
+- [ ] Unit tests
+- [ ] Redis integration tests with disposable data
+- [ ] Streamlit page/manual workflow checks
+- [ ] Empty/malformed data tests
+- [ ] Concurrency/session isolation tests
+- [ ] Model evaluation where matching behavior changes
+- [ ] Documentation links and diagrams reviewed
 
-## 🔐 Security and privacy
-
-- [ ] No credentials, biometric data, real attendance data, or camera captures committed.
-- [ ] Consent, retention, deletion, and access implications reviewed.
-- [ ] No raw embeddings or personal identifiers added to logs.
-- [ ] Model/dependency/license provenance considered.
+Commands and actual results:
 
 ## 📚 Documentation
 
-- [ ] README and relevant docs updated.
-- [ ] Redis contracts and Mermaid diagrams updated when needed.
-- [ ] Current behavior distinguished from proposed behavior.
+- [ ] README updated
+- [ ] API/data-model docs updated
+- [ ] Architecture/flow diagrams updated
+- [ ] Security/threat-model/privacy docs updated
+- [ ] CHANGELOG/ROADMAP updated
 
-## 📷 Screenshots
+## ⚠️ Limitations
 
-Attach only synthetic/non-identifiable examples. Do not attach real face imagery or personal records.
+List untested behavior, assumptions and deferred work.
 
-## ⚠️ Risks and rollback
-
-Describe compatibility changes, data migration, operational risk, and rollback.
+**Do not attach real face images, embeddings, attendance logs, credentials, or private configuration.**
