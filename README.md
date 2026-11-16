@@ -10,6 +10,15 @@
     <img src="https://img.shields.io/badge/Runtime-ONNX%20CPU-005CED" alt="ONNX Runtime CPU" />
     <img src="https://img.shields.io/badge/License-MIT-2ea44f.svg" alt="MIT license" />
   </p>
+  <p>
+    <a href="https://github.com/Brajesh31/attendance-system-app/actions/workflows/ci.yml"><img src="https://github.com/Brajesh31/attendance-system-app/actions/workflows/ci.yml/badge.svg?branch=main" alt="Python syntax CI" /></a>
+    <a href="https://github.com/Brajesh31/attendance-system-app/actions/workflows/docs-quality.yml"><img src="https://github.com/Brajesh31/attendance-system-app/actions/workflows/docs-quality.yml/badge.svg?branch=main" alt="Documentation checks" /></a>
+    <a href="https://github.com/Brajesh31/attendance-system-app/actions/workflows/security.yml"><img src="https://github.com/Brajesh31/attendance-system-app/actions/workflows/security.yml/badge.svg?branch=main" alt="Security hygiene" /></a>
+    <a href="https://github.com/Brajesh31/attendance-system-app/commits/main"><img src="https://img.shields.io/github/last-commit/Brajesh31/attendance-system-app?logo=github" alt="Last commit" /></a>
+    <a href="https://github.com/Brajesh31/attendance-system-app/stargazers"><img src="https://img.shields.io/github/stars/Brajesh31/attendance-system-app?logo=github" alt="GitHub stars" /></a>
+    <a href="https://github.com/Brajesh31/attendance-system-app/network/members"><img src="https://img.shields.io/github/forks/Brajesh31/attendance-system-app?logo=github" alt="GitHub forks" /></a>
+    <a href="https://github.com/Brajesh31/attendance-system-app/issues"><img src="https://img.shields.io/github/issues/Brajesh31/attendance-system-app?logo=github" alt="Open issues" /></a>
+  </p>
   <p><a href="#-overview">Overview</a> · <a href="#-architecture">Architecture</a> · <a href="#-quick-start">Quick start</a> · <a href="docs/README.md">Full documentation</a></p>
 </div>
 
@@ -336,6 +345,10 @@ See [ROADMAP.md](ROADMAP.md).
 | Document | Scope |
 |---|---|
 | [Documentation hub](docs/README.md) | Complete guide index |
+| [Project structure](docs/project-structure.md) | File-by-file repository map |
+| [Operations](docs/operations.md) | Runbooks and maintenance |
+| [Risk register](docs/risk-register.md) | Prioritized risks |
+| [Glossary](docs/glossary.md) | Domain terminology |
 | [Product overview](docs/product-overview.md) | Goals, users, boundaries, requirements |
 | [Architecture](docs/architecture.md) | Components and runtime boundaries |
 | [System design](docs/system-design.md) | Recognition and event design |
