@@ -1,84 +1,77 @@
-# 🚀 Installation
+# 🚀 Installation and local development
 
-## System requirements
+## Requirements
 
-| Requirement | Guidance |
-|---|---|
-| Python | 3.10+ is a practical starting point; validate exact supported versions |
-| pip | Current pip recommended |
-| Redis | Local or managed private instance |
-| Camera | Browser-accessible camera for live features |
-| Browser | WebRTC support and camera permission |
-| Runtime | CPU ONNX Runtime is configured by default |
-| Storage | Space for model files, Python packages, and Redis data |
-
-The repository includes ONNX model files under `insightface_model/models/buffalo_sc/`. The larger model file is approximately 13.6 MB, so a fresh clone and package install may take time.
+- Python 3.10+ as used by existing bytecode caches; no formal tested-version matrix is published.
+- Redis reachable by the application process.
+- Webcam and browser camera permission for registration/recognition.
+- Python packages from requirements.txt.
+- Model assets under insightface_model/models/buffalo_sc.
+- Native/system compatibility for OpenCV, InsightFace, ONNX Runtime and WebRTC dependencies.
 
 ## Clone
 
-```bash
+~~~bash
 git clone https://github.com/Brajesh31/attendance-system-app.git
 cd attendance-system-app
-```
+~~~
 
-## Virtual environment
+## Create and activate a virtual environment
 
-```bash
+~~~bash
 python -m venv .venv
-```
+~~~
 
-Activate on Windows PowerShell:
+Windows PowerShell:
 
-```powershell
+~~~powershell
 .venv\Scripts\Activate.ps1
-```
+~~~
 
-Activate on macOS/Linux:
+macOS/Linux:
 
-```bash
+~~~bash
 source .venv/bin/activate
-```
+~~~
 
 ## Install dependencies
 
-```bash
+~~~bash
 python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
-```
+~~~
 
-If OpenCV, InsightFace, or ONNX Runtime fails to install, record OS version, Python version, architecture, and the exact sanitized pip error. Do not randomly install GPU packages when the source explicitly configures CPU execution.
+requirements.txt does not pin exact versions. Introduce a tested lock/constraints file with a platform and Python version matrix for reproducible environments.
 
 ## Configure Redis
 
-1. Start a local Redis instance or provision a private managed one.
-2. Require authentication and TLS for remote traffic.
-3. Restrict access by network ACL.
-4. Create a disposable database/namespace for development.
-5. Externalize connection settings in source before expecting `.env.example` values to take effect.
+face_rec.py and upload_logs.py currently use hard-coded Redis connection values. .env.example is not loaded by the application. Do not assume setting variables there changes runtime behavior. A configuration refactor is required. Never expose Redis publicly.
 
-The existing source has placeholder connection values in two modules. A configuration refactor is required.
+## Review authentication configuration
 
-## Configure authentication
+config.yaml contains sample identity, password hash and cookie signing key. Replace these for every shared environment. Never reuse the sample credentials/key. Restrict configuration file permissions and keep real secrets outside Git.
 
-Do not run the committed sample account/key in a shared environment. Create a private authenticator configuration with a unique strong password hash, a random cookie key, and only intended operators. Keep the file outside version control and restrict file permissions.
+## Start Redis and Streamlit
 
-## Start the app
+Start an isolated local Redis instance, then run:
 
-```bash
+~~~bash
 streamlit run Home.py
-```
+~~~
 
-Streamlit normally prints a localhost URL on port 8501. A camera may require HTTPS in a remote deployment.
+Open the local URL printed by Streamlit, normally http://localhost:8501.
 
-## Verify installation
+## Local smoke test
 
-- Login screen loads.
-- Redis is reachable with the configured credentials.
-- InsightFace can load the local model.
-- Browser can start a WebRTC stream.
-- No-face frames do not crash the callback.
-- Registration stores a test vector in disposable Redis.
-- Recognition can return Unknown for an unregistered test identity.
-- Reporting parses a synthetic event list (after correcting the known function-name mismatch).
+1. Confirm app and authentication UI load.
+2. Confirm Redis connection using disposable test data.
+3. Verify model assets load.
+4. Grant browser camera permission.
+5. Register a synthetic/consenting test identity.
+6. Verify an embedding entry is written.
+7. Run recognition and check event writes.
+8. Open report and test empty, valid and malformed event data.
 
-See [Troubleshooting](troubleshooting.md).
+## Safety boundary
+
+Use synthetic data only. Do not enroll real people without documented legal basis, consent where required, a non-biometric alternative, risk assessment and approval. This is not a production deployment guide.
