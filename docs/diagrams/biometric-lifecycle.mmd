@@ -1,0 +1,11 @@
+flowchart TD
+  A["Define purpose and lawful basis"] --> B["Explain use and non-biometric alternative"]
+  B --> C{"Opt-in / required consent recorded?"}
+  C -->|No| D["Use approved alternative"]
+  C -->|Yes| E["Enroll minimum required template"]
+  E --> F["Restrict access to template"]
+  F --> G["Use only for documented purpose"]
+  G --> H["Apply event and template retention"]
+  H --> I["Process correction/withdrawal/deletion"]
+  I --> J["Verify deletion from primary stores, replicas and backup lifecycle"]
+  J --> K["Record completion without retaining biometric data"]
