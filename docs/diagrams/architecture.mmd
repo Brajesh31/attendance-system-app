@@ -1,0 +1,13 @@
+flowchart TD
+  Operator["Operator / user"] --> UI["Streamlit multipage UI"]
+  UI --> Auth["streamlit-authenticator"]
+  UI --> Pages["Home and feature pages"]
+  Pages --> Core["face_rec.py"]
+  Core --> Model["InsightFace buffalo_sc"]
+  Model --> Vectors["512-dimensional embeddings"]
+  Core --> RedisReg[("Redis hash academy:register")]
+  Core --> RedisLog[("Redis list attendance:logs")]
+  Pages --> RTC["streamlit-webrtc camera frames"]
+  RTC --> Core
+  RedisReg --> Core
+  RedisLog --> Report["Report page / pandas"]
