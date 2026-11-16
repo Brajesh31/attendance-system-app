@@ -2,25 +2,31 @@
 
 ## Project status
 
-This is an educational face-attendance prototype. It processes biometric embeddings and attendance histories. It is not production-hardened and has known configuration, concurrency, authorization, and privacy gaps. Do not expose it to public networks or use it for consequential attendance decisions without a separate security/privacy program.
+This repository is an educational face-attendance prototype. It is not a production identity-verification or attendance system. Face embeddings are sensitive biometric data. The source contains sample configuration secrets and multiple security/privacy gaps documented in docs/security-review.md.
 
 ## Reporting a vulnerability
 
-Do not publish credentials, biometric vectors, face images, attendance records, or exploit details in a public issue. Use the maintainer contact path at <https://github.com/Brajesh31> and provide the affected component, sanitized reproduction steps, expected impact, and suggested remediation. Do not attach personal or biometric samples.
+Use GitHub's private Security Advisories:
+https://github.com/Brajesh31/attendance-system-app/security/advisories/new
 
-## Sensitive-data handling
+Do not publish biometric samples, embeddings, real attendance events, passwords, cookie values or private endpoints in public issues.
 
-- Treat embeddings as biometric data.
-- Treat attendance history as sensitive personal/behavioral data.
-- Never commit real configuration, cookie keys, passwords, Redis URLs, camera captures, or production logs.
-- Do not expose Redis publicly.
-- Rotate any credential that has entered Git history or a public issue.
-- Keep incident evidence access-restricted.
+Include the affected commit/file, environment, minimal synthetic reproduction, expected/actual behavior and sanitized logs.
 
-## Required deployment controls
+## Known areas requiring review
 
-Private networking, TLS, Redis ACLs, managed secrets, strong authentication, role-based authorization, consent, retention/deletion, audit logging, backups control, model provenance, and an incident response process are required before any real-person pilot.
+- Sample account and cookie signing key in config.yaml.
+- Hard-coded Redis connection placeholders in Python modules.
+- Biometric template and attendance event access control.
+- Shared temporary registration file and global mutable recognition state.
+- Missing demonstrated consent, retention, deletion and access-audit workflows.
+- No demonstrated liveness/anti-spoofing or validated model performance.
+- Delimiter-based unversioned Redis event format.
 
-## Scope
+## Safe use
 
-This policy does not promise a service-level response time. Report urgent exposures through a private channel and notify the data/security owner of the affected organization.
+Use only isolated development environments and synthetic or explicitly authorized test data. Do not use real biometric data or consequential attendance decisions without qualified legal/privacy review, explicit governance, accessible alternatives, security testing and model evaluation.
+
+## Response
+
+Restrict access, preserve evidence, rotate exposed secrets, assess impact, follow applicable notification duties, remediate root causes and add regression tests. Passing CI does not constitute penetration testing or biometric validation.
