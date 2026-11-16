@@ -1,0 +1,16 @@
+flowchart TD
+  A["WebRTC callback receives frame"] --> B["Convert frame to BGR array"]
+  B --> C["InsightFace detection and embedding"]
+  C --> D["Load registered vectors from Redis"]
+  D --> E["Cosine similarity"]
+  E --> F{"Best score meets threshold?"}
+  F -->|No| G["Label Unknown"]
+  F -->|Yes| H["Label stored Name and Role"]
+  H --> I["Append observation to buffer"]
+  G --> J["Annotate and return frame"]
+  I --> K{"30-second interval reached?"}
+  K -->|No| J
+  K -->|Yes| L["Deduplicate buffered identities"]
+  L --> M["LPUSH attendance:logs"]
+  M --> N["Clear buffer"]
+  N --> J
