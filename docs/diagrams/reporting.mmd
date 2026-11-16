@@ -1,0 +1,14 @@
+flowchart TD
+  A["Open reports"] --> B["LRANGE attendance:logs"]
+  B --> C["Decode Redis values"]
+  C --> D["Parse Name@Role@Timestamp"]
+  D --> E{"Event valid?"}
+  E -->|No| F["Reject/quarantine malformed event"]
+  E -->|Yes| G["Group by date, person and role"]
+  G --> H["First sighting"]
+  G --> I["Last sighting"]
+  H --> J["Calculate observed span"]
+  I --> J
+  J --> K["Apply current prototype status heuristic"]
+  K --> L["Render report"]
+  M["Important: observations do not prove actual arrival/departure"] -.-> L
