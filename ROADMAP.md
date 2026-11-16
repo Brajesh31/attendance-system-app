@@ -1,37 +1,48 @@
 # 🗺️ Roadmap
 
-This roadmap is ordered by risk reduction. New visual features should not take priority over protecting people and correcting data integrity.
+This roadmap distinguishes current prototype foundations from proposed improvements.
 
-## Phase 1: Configuration and correctness
-- [ ] Remove sample identity and cookie key from shared configuration.
-- [ ] Add secret-safe auth configuration template.
-- [ ] Centralize Redis configuration and validate startup.
-- [ ] Fix reporting function-name mismatch.
-- [ ] Fix registration role option tuple.
-- [ ] Isolate registration samples by session.
-- [ ] Remove module import-time UI side effects.
+## Existing foundations
 
-## Phase 2: Data contracts and tests
-- [ ] Version embedding records and validate model/dimension.
-- [ ] Replace delimiter-based attendance strings with structured events.
-- [ ] Normalize timestamps to UTC with explicit timezone display.
-- [ ] Add unit tests for matching, codecs, parsing, and reporting.
-- [ ] Add integration tests against disposable Redis.
-- [ ] Add pinned/constraints dependency strategy.
+- [x] Streamlit multipage application.
+- [x] InsightFace buffalo_sc embedding pipeline.
+- [x] WebRTC camera integration.
+- [x] Redis registration hash and attendance event list.
+- [x] Similarity-based matching.
+- [x] Daily reporting page.
+- [x] Documentation for architecture, privacy, security, QA and deployment.
 
-## Phase 3: Privacy and security
-- [ ] Document consent and lawful basis.
-- [ ] Provide non-biometric attendance method.
-- [ ] Implement role-based access and audit trail.
-- [ ] Implement expiry, deletion, correction, and backup retention.
-- [ ] Perform privacy impact and security review.
-- [ ] Evaluate accuracy and spoof risks with an approved protocol.
+## Critical security and privacy
 
-## Phase 4: Operations and maintainability
-- [ ] Add validated deployment manifests.
-- [ ] Add health diagnostics and resource monitoring.
-- [ ] Add backup/restore and incident runbooks.
-- [ ] Add accessible empty/error/loading states.
-- [ ] Verify model/package licensing and provenance.
+- [ ] Replace committed sample user identity and cookie signing key.
+- [ ] Centralize Redis configuration using private environment/secret loading.
+- [ ] Enforce authenticated authorization for registration, lookup, report and deletion operations.
+- [ ] Define consent/notice, non-biometric alternative, purpose limitation and retention.
+- [ ] Implement verifiable deletion of templates and events from stores/backups.
+- [ ] Add audit trail for sensitive administrative access.
+- [ ] Restrict Redis network access with ACLs and TLS.
 
-No item should be represented as implemented until merged, tested, and documented.
+## Reliability and correctness
+
+- [ ] Fix report retrieval function spelling mismatch.
+- [ ] Fix registration role option concatenation.
+- [ ] Isolate registration samples per session and cleanup reliably.
+- [ ] Scope recognition buffer/timer per stream.
+- [ ] Validate embedding dimension/dtype and malformed Redis records.
+- [ ] Replace delimiter strings with versioned structured events.
+- [ ] Correct report semantics and add review/correction workflow.
+- [ ] Add tests for empty/malformed Redis data and multi-session behavior.
+
+## Model and deployment quality
+
+- [ ] Evaluate false acceptance and false rejection with representative, approved data.
+- [ ] Evaluate presentation-attack resistance; do not claim liveness without evidence.
+- [ ] Document model provenance, license and checksums.
+- [ ] Pin tested dependency versions.
+- [ ] Add deployment/container/process supervision and Redis backup runbooks.
+- [ ] Add monitoring that does not leak personal/biometric content.
+- [ ] Define support matrix and release process.
+
+## Priority
+
+Privacy, security, data integrity, and accuracy evaluation take precedence over cosmetic additions or automated attendance decisions.
